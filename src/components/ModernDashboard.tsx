@@ -19,6 +19,7 @@ import {
   Settings,
   ChevronRight,
   Eye,
+  GripVertical,
   RotateCcw,
   Zap,
   Target,
@@ -115,7 +116,16 @@ function ModernWidget({ title, children, onRemove, id, className = '' }: {
     >
       {title && (
         <div className="flex items-center justify-between p-4 border-b border-gray-50">
-          <h3 className="font-semibold text-gray-900 text-base">{title}</h3>
+          <div className="flex items-center gap-2">
+            <span
+              className="drag-handle p-2 rounded-lg hover:bg-gray-100 active:cursor-grabbing"
+              aria-label="Drag widget"
+              title="Drag to move"
+            >
+              <GripVertical className="w-4 h-4 text-gray-400" />
+            </span>
+            <h3 className="font-semibold text-gray-900 text-base">{title}</h3>
+          </div>
           {onRemove && (
             <button
               onClick={() => onRemove(id)}
@@ -632,6 +642,7 @@ export default function ModernDashboard() {
         margin={[20, 20]}
         containerPadding={[0, 0]}
         isDraggable={true}
+        draggableHandle={".drag-handle"}
         isResizable={true}
         useCSSTransforms={true}
         compactType="vertical"
