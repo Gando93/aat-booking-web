@@ -1,268 +1,318 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Calendar, 
   Users, 
-  Cog,
+  Settings, 
   X,
   User,
-  Briefcase,
+  Bell,
+  LogOut,
+  ChevronUp,
   ChevronLeft,
   ChevronRight,
-  Bell,
-  Search
+  HelpCircle,
+  Truck
 } from 'lucide-react';
 import { useAppState } from '../context/AppContext';
+import { motion } from 'framer-motion';
 
 interface SidebarProps {
-  onClose: () => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
-export default function Sidebar({ onClose }: SidebarProps) {
-  const { state } = useAppState();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, color: 'text-blue-600' },
-    { name: 'Bookings', href: '/bookings', icon: Calendar, color: 'text-green-600' },
-    { name: 'Services', href: '/services', icon: Briefcase, color: 'text-purple-600' },
-    { name: 'Users', href: '/users', icon: Users, color: 'text-orange-600' },
-    { name: 'Settings', href: '/settings', icon: Cog, color: 'text-gray-600' },
+// Notification component
+function NotificationDropdown({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const notifications = [
+    { id: 1, title: 'New booking received', message: 'John Doe booked City Tour', time: '2 min ago', unread: true },
+    { id: 2, title: 'Payment confirmed', message: 'Payment of €150 confirmed', time: '1 hour ago', unread: true },
+    { id: 3, title: 'Service updated', message: 'Airport Transfer pricing updated', time: '3 hours ago', unread: false },
+    { id: 4, title: 'System backup', message: 'Daily backup completed successfully', time: '1 day ago', unread: false },
   ];
 
-  const filteredNavigation = navigation.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const sidebarVariants = {
-    expanded: { width: 280 },
-    collapsed: { width: 80 }
-  };
-
-  const contentVariants = {
-    expanded: { opacity: 1, x: 0 },
-    collapsed: { opacity: 0, x: -20 }
-  };
+  if (!isOpen) return null;
 
   return (
     <motion.div
-      className="h-full bg-white flex flex-col shadow-lg border-r border-gray-200"
-      variants={sidebarVariants}
-      animate={isCollapsed ? 'collapsed' : 'expanded'}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      className="absolute bottom-full right-0 mb-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50"
     >
-      {/* Header */}
-      <div className="px-6 py-5 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
-          <motion.div 
-            className="flex items-center space-x-3"
-            variants={contentVariants}
-            animate={isCollapsed ? 'collapsed' : 'expanded'}
+          <h3 className="font-semibold text-gray-900">Notifications</h3>
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-gray-100 rounded-full"
           >
-            <motion.div 
-              className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="text-white font-bold text-sm">AAT</span>
-            </motion.div>
-            <AnimatePresence>
-              {!isCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <h2 className="text-lg font-semibold text-gray-900">AAT Booking</h2>
-                  <p className="text-xs text-gray-500">Management System</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-          
-          <div className="flex items-center space-x-2">
-            <motion.button
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {isCollapsed ? (
-                <ChevronRight className="w-4 h-4 text-gray-600" />
-              ) : (
-                <ChevronLeft className="w-4 h-4 text-gray-600" />
-              )}
-            </motion.button>
-            
-            <button
-              onClick={onClose}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+      <div className="max-h-80 overflow-y-auto">
+        {notifications.map((notification) => (
+          <div
+            key={notification.id}
+            className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer ${
+              notification.unread ? 'bg-blue-50' : ''
+            }`}
+          >
+            <div className="flex items-start space-x-3">
+              <div className={`w-2 h-2 rounded-full mt-2 ${
+                notification.unread ? 'bg-blue-500' : 'bg-gray-300'
+              }`} />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900">
+                  {notification.title}
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {notification.message}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {notification.time}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="p-4 border-t border-gray-100">
+        <button className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium">
+          View all notifications
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+// Profile dropdown component
+function ProfileDropdown({ isOpen }: { isOpen: boolean }) {
+  const { state, dispatch } = useAppState();
+
+  if (!isOpen) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      className="absolute bottom-full right-0 mb-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50"
+    >
+      <div className="p-4 border-b border-gray-100">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <User className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">{state.user?.name}</p>
+            <p className="text-sm text-gray-500">{state.user?.email}</p>
           </div>
         </div>
       </div>
+      <div className="py-2">
+        <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+          <User className="h-4 w-4" />
+          <span>Profile</span>
+        </button>
+        <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+          <Settings className="h-4 w-4" />
+          <span>Settings</span>
+        </button>
+        <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+          <HelpCircle className="h-4 w-4" />
+          <span>Help & Support</span>
+        </button>
+        <hr className="my-2" />
+        <button 
+          onClick={() => dispatch({ type: 'SET_USER', user: null })}
+          className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
+        >
+          <LogOut className="h-4 w-4" />
+          <span>Sign out</span>
+        </button>
+      </div>
+    </motion.div>
+  );
+}
 
-      {/* Search */}
-      <AnimatePresence>
-        {!isCollapsed && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="px-4 py-3 border-b border-gray-100"
+export default function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
+  const { state } = useAppState();
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  const navigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Bookings', href: '/bookings', icon: Calendar },
+    { name: 'Services', href: '/services', icon: Settings },
+    { name: 'Fleet', href: '/fleet', icon: Truck, roles: ['admin', 'manager', 'staff'] },
+    { name: 'Users', href: '/users', icon: Users },
+  ];
+
+  const unreadCount = 2; // This would come from your notification state
+
+  return (
+    <motion.div
+      className={`bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ${
+        collapsed ? 'w-16' : 'w-64'
+      }`}
+      animate={{ width: collapsed ? 64 : 256 }}
+    >
+      {/* Header */}
+      <div className="p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          {!collapsed && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center space-x-3"
+            >
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">AAT</span>
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">AAT Booking</h1>
+                <p className="text-xs text-gray-500">Management System</p>
+              </div>
+            </motion.div>
+          )}
+          <button
+            onClick={onToggleCollapse}
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4 text-gray-600" />
+            ) : (
+              <ChevronLeft className="h-4 w-4 text-gray-600" />
+            )}
+          </button>
+        </div>
+      </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-        {filteredNavigation.map((item, index) => {
+      <nav className="flex-1 p-4 space-y-2">
+        {navigation.map((item) => {
           const Icon = item.icon;
+          const userRole = state.user?.role || 'staff';
+          
+          // Check role-based visibility
+          if (item.roles && !item.roles.includes(userRole)) {
+            return null;
+          }
+          
           return (
-            <motion.div
+            <NavLink
               key={item.name}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
+              to={item.href}
+              className={({ isActive }) =>
+                `flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
+                  isActive
+                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-500'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                }`
+              }
             >
-              <NavLink
-                to={item.href}
-                className={({ isActive }) =>
-                  `flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group ${
-                    isActive
-                      ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 shadow-sm border-l-4 border-blue-500'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`${isActive ? item.color : 'text-gray-400 group-hover:text-gray-600'} transition-colors`}
-                    >
-                      <Icon className="w-5 h-5" />
-                    </motion.div>
-                    
-                    <AnimatePresence>
-                      {!isCollapsed && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -10 }}
-                          className="ml-3"
-                        >
-                          {item.name}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                    
-                    {/* Active indicator */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="ml-auto w-2 h-2 bg-blue-500 rounded-full"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
-                  </>
-                )}
-              </NavLink>
-            </motion.div>
+              <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : ''}`} />
+              {!collapsed && (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="font-medium"
+                >
+                  {item.name}
+                </motion.span>
+              )}
+            </NavLink>
           );
         })}
       </nav>
 
       {/* Quick Stats */}
-      <AnimatePresence>
-        {!isCollapsed && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="px-4 py-4 border-t border-gray-200"
-          >
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4">
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Quick Stats</h4>
-              <div className="grid grid-cols-2 gap-3 text-center">
-                <div>
-                  <div className="text-lg font-bold text-blue-600">{state.bookings.length}</div>
-                  <div className="text-xs text-gray-600">Bookings</div>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-purple-600">{state.users.length}</div>
-                  <div className="text-xs text-gray-600">Users</div>
-                </div>
+      {!collapsed && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="p-4 border-t border-gray-200"
+        >
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4">
+            <h3 className="text-sm font-semibold text-gray-900 mb-3">Quick Stats</h3>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Bookings</span>
+                <span className="text-sm font-semibold text-blue-600">
+                  {state.bookings.length}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Users</span>
+                <span className="text-sm font-semibold text-purple-600">
+                  {state.users.length}
+                </span>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </motion.div>
+      )}
 
       {/* User Profile */}
-      <div className="px-4 py-4 border-t border-gray-200">
-        <motion.div 
-          className="flex items-center space-x-3 cursor-pointer p-2 rounded-xl hover:bg-gray-50 transition-colors"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <motion.div 
-            className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center"
-            whileHover={{ scale: 1.1 }}
-          >
-            <User className="w-4 h-4 text-white" />
-          </motion.div>
-          
-          <AnimatePresence>
-            {!isCollapsed && (
-              <motion.div 
+      <div className="p-4 border-t border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <User className="h-4 w-4 text-white" />
+            </div>
+            {!collapsed && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 className="flex-1 min-w-0"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
               >
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  {state.user?.name || 'Admin User'}
+                  {state.user?.name}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
-                  {state.user?.email || 'admin@aatbooking.com'}
+                  {state.user?.email}
                 </p>
               </motion.div>
             )}
-          </AnimatePresence>
+          </div>
           
-          <AnimatePresence>
-            {!isCollapsed && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0 }}
+          <div className="flex items-center space-x-1">
+            {/* Notifications */}
+            <div className="relative">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors relative"
               >
-                <Bell className="w-4 h-4 text-gray-400" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+                <Bell className="h-4 w-4 text-gray-600" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+              <NotificationDropdown
+                isOpen={showNotifications}
+                onClose={() => setShowNotifications(false)}
+              />
+            </div>
+
+            {/* Profile */}
+            <div className="relative">
+              <button
+                onClick={() => setShowProfile(!showProfile)}
+                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ChevronUp className="h-4 w-4 text-gray-600" />
+              </button>
+              <ProfileDropdown
+                isOpen={showProfile}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
