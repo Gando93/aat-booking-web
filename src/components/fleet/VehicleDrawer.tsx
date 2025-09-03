@@ -1,7 +1,7 @@
 import type { Vehicle, VehicleAssignment, MaintenanceLog } from '../../types/fleet';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
-import { X, Truck, Users, Gauge, Fuel, Calendar, FileText, QrCode, Wrench, MapPin } from 'lucide-react';
+import { X, Truck, Users, Gauge, Fuel, Calendar, QrCode, Wrench, MapPin } from 'lucide-react';
 
 interface VehicleDrawerProps {
   vehicle: Vehicle | null;
