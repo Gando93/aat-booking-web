@@ -19,6 +19,7 @@ import {
   Settings,
   ChevronRight,
   Eye,
+  RotateCcw,
   Zap,
   Target,
   Award,
@@ -48,6 +49,8 @@ interface WidgetConfig {
   defaultSize: { w: number; h: number };
   minSize: { w: number; h: number };
 }
+
+const DEFAULT_WIDGETS = ['total-bookings', 'total-revenue', 'calendar', 'recent-activity'];
 
 // Available widgets library
 const WIDGET_LIBRARY: WidgetConfig[] = [
@@ -463,13 +466,26 @@ export default function ModernDashboard() {
   const [activeWidgets, setActiveWidgets] = useState(() => {
     try {
       const saved = localStorage.getItem('aat-dashboard-widgets');
-      return saved ? JSON.parse(saved) : ['total-bookings', 'total-revenue', 'calendar', 'recent-activity'];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+      return DEFAULT_WIDGETS;
     } catch {
-      return ['total-bookings', 'total-revenue', 'calendar', 'recent-activity'];
+      return DEFAULT_WIDGETS;
     }
   });
 
   const [showAddWidget, setShowAddWidget] = useState(false);
+
+  const handleResetDashboard = () => {
+    setLayouts({});
+    localStorage.removeItem('aat-dashboard-layouts');
+    setActiveWidgets(DEFAULT_WIDGETS);
+    localStorage.setItem('aat-dashboard-widgets', JSON.stringify(DEFAULT_WIDGETS));
+  };
 
   const totalRevenue = state.bookings.reduce((sum, booking) => sum + booking.totalAmount, 0);
 
@@ -595,8 +611,12 @@ export default function ModernDashboard() {
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
               <span className="text-sm font-medium text-gray-700">Live</span>
             </div>
-            <button className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 hover:scale-105">
-              <Eye className="w-5 h-5 text-gray-600" />
+            <button 
+              className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 hover:scale-105"
+              onClick={handleResetDashboard}
+              title="Reset dashboard"
+            >
+              <RotateCcw className="w-5 h-5 text-gray-600" />
             </button>
           </div>
         </div>
@@ -617,21 +637,47 @@ export default function ModernDashboard() {
         compactType="vertical"
         preventCollision={false}
       >
-        {activeWidgets.map((widgetId: string) => {
-          const widget = WIDGET_LIBRARY.find(w => w.id === widgetId);
-          return (
-            <div key={widgetId}>
-              <ModernWidget 
-                title={widget?.title} 
-                id={widgetId}
-                onRemove={widget?.category !== 'essential' ? handleRemoveWidget : undefined}
-                className="h-full"
-              >
-                {renderWidget(widgetId)}
-              </ModernWidget>
+        {activeWidgets.length === 0 ? (
+          <div key="empty-state" className="col-span-12">
+            <div className="bg-white rounded-3xl border border-gray-100 p-8 text-center shadow-sm">
+              <div className="mx-auto w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-50 mb-4">
+                <Eye className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">No widgets on your dashboard</h3>
+              <p className="text-gray-500 mt-2">Add widgets to start building your personalized dashboard.</p>
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <button
+                  onClick={() => setShowAddWidget(true)}
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+                >
+                  <Plus className="w-4 h-4 mr-2" /> Add Widgets
+                </button>
+                <button
+                  onClick={handleResetDashboard}
+                  className="inline-flex items-center px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" /> Reset to Defaults
+                </button>
+              </div>
             </div>
-          );
-        })}
+          </div>
+        ) : (
+          activeWidgets.map((widgetId: string) => {
+            const widget = WIDGET_LIBRARY.find(w => w.id === widgetId);
+            return (
+              <div key={widgetId}>
+                <ModernWidget 
+                  title={widget?.title} 
+                  id={widgetId}
+                  onRemove={widget?.category !== 'essential' ? handleRemoveWidget : undefined}
+                  className="h-full"
+                >
+                  {renderWidget(widgetId)}
+                </ModernWidget>
+              </div>
+            );
+          })
+        )}
       </ResponsiveGridLayout>
 
       {/* Add Widget Button */}
