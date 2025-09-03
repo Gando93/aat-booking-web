@@ -1,14 +1,11 @@
-import React from 'react';
-import { Vehicle } from '../../types/fleet';
+import type { Vehicle } from '../../types/fleet';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { 
-  Truck, 
   Users, 
   Gauge, 
   Fuel, 
-  Calendar, 
-  MoreHorizontal,
+  Calendar,
   Eye,
   Edit,
   Trash2
@@ -41,7 +38,7 @@ export default function VehicleCard({
     switch (type) {
       case 'bus': return '🚌';
       case 'van': return '🚐';
-      case 'car': return '��';
+      case 'car': return '🚗';
       case 'boat': return '⛵';
       default: return '🚗';
     }

@@ -1,7 +1,6 @@
-import React from 'react';
 import { useFleet } from '../../state/fleet/FleetContext';
 import KpiCard from '../ui/KpiCard';
-import { Truck, Wrench, Fuel, Calendar } from 'lucide-react';
+import { Truck, Wrench, Calendar } from 'lucide-react';
 
 export default function FleetKpis() {
   const { state } = useFleet();
@@ -16,7 +15,6 @@ export default function FleetKpis() {
   // Mock sparkline data
   const vehicleUtilizationData = [65, 70, 68, 75, 80, 78, 82];
   const maintenanceData = [2, 1, 3, 2, 1, 2, 1];
-  const fuelEfficiencyData = [8.5, 8.2, 8.8, 8.1, 8.9, 8.3, 8.7];
   const serviceData = [3, 2, 4, 3, 2, 3, 2];
 
   return (

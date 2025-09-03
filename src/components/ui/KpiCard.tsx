@@ -1,8 +1,7 @@
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './Card';
 import { Badge } from './Badge';
 import Sparkline from './Sparkline';
-import { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface KpiCardProps {
   title: string;

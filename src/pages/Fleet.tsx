@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FleetProvider, useFleet } from '../state/fleet/FleetContext';
 import FleetKpis from '../components/fleet/FleetKpis';
 import VehicleCard from '../components/fleet/VehicleCard';
-import { Vehicle } from '../types/fleet';
+import type { Vehicle } from '../types/fleet';
 import { Plus, Grid, Calendar as CalendarIcon } from 'lucide-react';
 
 function FleetContent() {

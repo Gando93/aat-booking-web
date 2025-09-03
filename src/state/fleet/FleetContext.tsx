@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { Vehicle, VehicleAssignment, MaintenanceLog, FleetState } from '../../types/fleet';
+import React, { createContext, useContext, useReducer } from 'react';
+import type { ReactNode } from 'react';
+import type { Vehicle, VehicleAssignment, MaintenanceLog, FleetState } from '../../types/fleet';
 
 // Mock data for development
 const mockVehicles: Vehicle[] = [
