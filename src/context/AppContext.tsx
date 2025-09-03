@@ -1,10 +1,10 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { AppState, AppAction } from '../types';
 import { today } from '../types';
 
 const STORAGE_KEY = 'aat-booking-state';
 
-// Initial state with all 10 excursions
+// Initial state
 const initialState: AppState = {
   user: null,
   users: [
@@ -102,11 +102,11 @@ const initialState: AppState = {
     },
     {
       id: 'excursion_4',
-      name: 'Senegal Safari',
-      description: 'Cross-border safari to Fathala Reserve with wildlife viewing',
+      name: 'Senegal - Fathala Wild Reserve',
+      description: 'Cross-border safari adventure to Senegal\'s wildlife reserve',
       category: 'Wildlife Tours',
-      duration: 480,
-      price: 95,
+      duration: 630,
+      price: 115,
       maxCapacity: 10,
       isActive: true,
       createdAt: today(),
@@ -115,9 +115,10 @@ const initialState: AppState = {
         'Cross into Senegal',
         'Safari in Fathala Reserve (4x4 jeep)'
       ],
-      pickupTime: '6:00 AM',
-      dropoffTime: '6:00 PM',
+      pickupTime: '5:30 AM',
+      dropoffTime: '4:00 PM',
       itemsToBring: [
+        'Passport (mandatory)',
         'Yellow Fever vaccination book',
         'Hat & sunglasses',
         'Binoculars',
@@ -128,10 +129,10 @@ const initialState: AppState = {
     },
     {
       id: 'excursion_5',
-      name: 'Jungle & Baobab Island',
-      description: 'Nature walk through jungle to mystical Baobab Island',
+      name: 'Sita Joyeh (Baobab Island)',
+      description: 'Jungle walk and boat trip to mystical Baobab Island',
       category: 'Nature Tours',
-      duration: 300,
+      duration: 510,
       price: 55,
       maxCapacity: 12,
       isActive: true,
@@ -142,8 +143,8 @@ const initialState: AppState = {
         'Visit local marabout (witch doctor)',
         'Lunch on the island'
       ],
-      pickupTime: '9:00 AM',
-      dropoffTime: '2:00 PM',
+      pickupTime: '8:00 AM',
+      dropoffTime: '4:30 PM',
       itemsToBring: [
         'Walking shoes',
         'Curiosity 😊',
@@ -154,12 +155,12 @@ const initialState: AppState = {
     },
     {
       id: 'excursion_6',
-      name: 'Casamance Adventure',
-      description: 'Cross-border adventure to Casamance region of Senegal',
-      category: 'Nature Tours',
-      duration: 480,
-      price: 85,
-      maxCapacity: 10,
+      name: 'Explore Senegal',
+      description: 'Cross-border cultural tour to Casamance region',
+      category: 'Cultural Tours',
+      duration: 720,
+      price: 90,
+      maxCapacity: 15,
       isActive: true,
       createdAt: today(),
       highlights: [
@@ -168,9 +169,10 @@ const initialState: AppState = {
         'Kailo Island voodoo culture',
         'Lunch in Abene'
       ],
-      pickupTime: '6:30 AM',
-      dropoffTime: '6:30 PM',
+      pickupTime: '7:00 AM',
+      dropoffTime: '7:00 PM',
       itemsToBring: [
+        'Passport',
         'Yellow Fever Vaccination Book',
         'Sturdy shoes',
         'Sunscreen',
@@ -181,12 +183,12 @@ const initialState: AppState = {
     },
     {
       id: 'excursion_7',
-      name: 'Mangrove Pirogue Cruise',
-      description: 'Relaxing boat cruise through mangrove channels',
+      name: 'River Memories',
+      description: 'Relaxing pirogue cruise through mangroves with swimming and fishing',
       category: 'Water Tours',
-      duration: 240,
-      price: 45,
-      maxCapacity: 15,
+      duration: 480,
+      price: 65,
+      maxCapacity: 10,
       isActive: true,
       createdAt: today(),
       highlights: [
@@ -194,101 +196,104 @@ const initialState: AppState = {
         'Stops for swimming and fishing',
         'Full onboard lunch'
       ],
-      pickupTime: '10:00 AM',
-      dropoffTime: '2:00 PM',
+      pickupTime: '9:00 AM',
+      dropoffTime: '5:00 PM',
       itemsToBring: [
-        'Swimwear & towel',
+        'Swimming clothes',
+        'Towel',
         'Sunscreen',
-        'Hat',
-        'Relaxation mode 😌',
-        'From Jan - March: Sweater for early morning'
+        'Camera (waterproof)'
       ],
       currency: 'EUR'
     },
     {
       id: 'excursion_8',
-      name: 'Roots Heritage Tour',
-      description: 'Historical tour following the "Roots" trail to Juffureh',
+      name: 'Senegal - Toubacouta',
+      description: 'Cross-border adventure to Senegal\'s delta region',
       category: 'Cultural Tours',
-      duration: 360,
-      price: 65,
+      duration: 720,
+      price: 95,
       maxCapacity: 12,
       isActive: true,
       createdAt: today(),
       highlights: [
         'Ferry to Barra',
-        'Albreda & Juffureh villages',
-        'Visit St. James Island',
-        '"Roots" history tour'
+        'Drive through Senegal countryside',
+        'Boat trip in Saloum Delta',
+        'Traditional lunch'
       ],
-      pickupTime: '8:00 AM',
-      dropoffTime: '2:00 PM',
+      pickupTime: '5:30 AM',
+      dropoffTime: '7:30 PM',
       itemsToBring: [
+        'Passport (mandatory)',
+        'Yellow Fever vaccination book',
+        'Comfortable clothes',
+        'Hat & sunscreen',
         'Camera',
-        'Sunscreen',
-        'Walking shoes',
-        'Curiosity about history',
-        'From Jan - March: a Sweater for early morning'
+        'From Jan – March Sweater'
       ],
       currency: 'EUR'
     },
     {
       id: 'excursion_9',
-      name: 'Bird Watching Tour',
-      description: 'Early morning bird watching in the mangroves',
-      category: 'Wildlife Tours',
-      duration: 180,
-      price: 35,
-      maxCapacity: 8,
+      name: 'Jufureh & Kunta Kinteh Island',
+      description: 'Historical journey to the roots of African-American heritage',
+      category: 'Historical Tours',
+      duration: 420,
+      price: 50,
+      maxCapacity: 15,
       isActive: true,
       createdAt: today(),
       highlights: [
-        'Early morning creek tour',
-        'Guided bird spotting',
-        'Picnic breakfast'
+        'Jufureh village (Alex Haley\'s Roots)',
+        'Kunta Kinteh Island (former James Island)',
+        'Slave trade history',
+        'Traditional lunch'
       ],
-      pickupTime: '6:30 AM',
-      dropoffTime: '9:30 AM',
+      pickupTime: '8:00 AM',
+      dropoffTime: '3:00 PM',
       itemsToBring: [
-        'Binoculars',
-        'Hat & sunglasses',
-        'Light clothing',
-        'Water'
+        'Comfortable walking shoes',
+        'Hat & sunscreen',
+        'Water bottle',
+        'Camera',
+        'Respectful attire'
       ],
       currency: 'EUR'
     },
     {
       id: 'excursion_10',
-      name: 'Historical Sites Tour',
-      description: 'Tour of important historical sites and monuments',
-      category: 'Historical Tours',
+      name: 'Makasutu Culture Forest',
+      description: 'Sacred forest experience with traditional culture and wildlife',
+      category: 'Nature Tours',
       duration: 300,
-      price: 50,
+      price: 45,
       maxCapacity: 12,
       isActive: true,
       createdAt: today(),
       highlights: [
-        'Nature walk through the reserve',
-        'Wildlife rescue center',
-        'Lunch at Lamin Lodge'
+        'Sacred forest walk',
+        'Traditional music & dance',
+        'Wildlife spotting',
+        'Local craft demonstrations'
       ],
-      pickupTime: '9:00 AM',
-      dropoffTime: '2:00 PM',
+      pickupTime: '2:00 PM',
+      dropoffTime: '7:00 PM',
       itemsToBring: [
-        'Sturdy shoes',
         'Insect repellent',
-        'Water bottle',
-        'Camera'
+        'Comfortable shoes',
+        'Camera',
+        'Light jacket for evening'
       ],
       currency: 'EUR'
     },
     {
       id: 'service_2',
       name: 'Airport Transfer',
-      description: 'Private airport transfer service',
+      description: 'Professional airport pickup and drop-off service',
       category: 'Transportation',
       duration: 60,
-      price: 30,
+      price: 25,
       maxCapacity: 4,
       isActive: true,
       createdAt: today(),
@@ -309,7 +314,31 @@ const initialState: AppState = {
   ],
   isLoading: false,
   error: null,
-};
+  notifications: [],
+  systemSettings: {
+    id: "settings_1",
+    companyName: "AAT Booking System",
+    companyEmail: "info@aatbooking.com",
+    companyPhone: "+220 123 4567",
+    companyAddress: "Banjul, The Gambia",
+    defaultCurrency: "EUR",
+    timezone: "GMT",
+    dateFormat: "DD/MM/YYYY",
+    timeFormat: "24h",
+    emailNotifications: true,
+    smsNotifications: false,
+    autoConfirmBookings: false,
+    requireDeposit: true,
+    defaultDepositPercentage: 25,
+    cancellationPolicy: "Free cancellation up to 24 hours before the tour",
+    termsAndConditions: "Terms and conditions content...",
+    privacyPolicy: "Privacy policy content...",
+    theme: "light",
+    language: "en",
+    autoSyncEnabled: true,
+    autoSyncInterval: 5
+  },
+  rolePermissions: []};
 
 // Reducer
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -321,47 +350,32 @@ function appReducer(state: AppState, action: AppAction): AppState {
     case 'SET_ERROR':
       return { ...state, error: action.error };
     case 'ADD_BOOKING':
-      return { ...state, bookings: [...state.bookings, action.booking] };
+      return { ...state, bookings: [action.booking, ...state.bookings] };
     case 'UPDATE_BOOKING':
       return {
         ...state,
-        bookings: state.bookings.map(booking =>
-          booking.id === action.booking.id ? action.booking : booking
-        ),
+        bookings: state.bookings.map(b => b.id === action.booking.id ? action.booking : b)
       };
     case 'DELETE_BOOKING':
-      return {
-        ...state,
-        bookings: state.bookings.filter(booking => booking.id !== action.id),
-      };
+      return { ...state, bookings: state.bookings.filter(b => b.id !== action.id) };
     case 'ADD_SERVICE':
-      return { ...state, services: [...state.services, action.service] };
+      return { ...state, services: [action.service, ...state.services] };
     case 'UPDATE_SERVICE':
       return {
         ...state,
-        services: state.services.map(service =>
-          service.id === action.service.id ? service : service
-        ),
+        services: state.services.map(s => s.id === action.service.id ? action.service : s)
       };
     case 'DELETE_SERVICE':
-      return {
-        ...state,
-        services: state.services.filter(service => service.id !== action.id),
-      };
+      return { ...state, services: state.services.filter(s => s.id !== action.id) };
     case 'ADD_USER':
-      return { ...state, users: [...state.users, action.user] };
+      return { ...state, users: [action.user, ...state.users] };
     case 'UPDATE_USER':
       return {
         ...state,
-        users: state.users.map(user =>
-          user.id === action.user.id ? action.user : user
-        ),
+        users: state.users.map(u => u.id === action.user.id ? action.user : u)
       };
     case 'DELETE_USER':
-      return {
-        ...state,
-        users: state.users.filter(user => user.id !== action.id),
-      };
+      return { ...state, users: state.users.filter(u => u.id !== action.id) };
     case 'RESTORE_STATE':
       return action.state;
     default:
@@ -379,25 +393,45 @@ const AppContext = createContext<{
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // Load state from localStorage on mount
+  // Load state from localStorage on mount with detailed logging
   useEffect(() => {
     try {
       const savedState = localStorage.getItem(STORAGE_KEY);
+      console.log("🔍 Checking localStorage for saved data...");
       if (savedState) {
         const parsedState = JSON.parse(savedState);
-        dispatch({ type: 'RESTORE_STATE', state: parsedState });
+        console.log("📊 Found saved data:", {
+          users: parsedState.users?.length || 0,
+          bookings: parsedState.bookings?.length || 0,
+          services: parsedState.services?.length || 0
+        });
+        // Always restore if there is saved data
+        if (parsedState && parsedState.users) {
+          console.log("✅ Restoring saved state...");
+          dispatch({ type: "RESTORE_STATE", state: parsedState });
+        } else {
+          console.log("⚠️ No valid data to restore");
+        }
+      } else {
+        console.log("❌ No saved data found in localStorage");
       }
     } catch (error) {
-      console.error('Error loading state from localStorage:', error);
+      console.error("💥 Error loading state from localStorage:", error);
     }
   }, []);
 
-  // Save state to localStorage whenever it changes
+  // Save state to localStorage whenever it changes with detailed logging
   useEffect(() => {
     try {
+      console.log("💾 Saving state to localStorage:", {
+        users: state.users.length,
+        bookings: state.bookings.length,
+        services: state.services.length
+      });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      console.log("✅ State saved successfully");
     } catch (error) {
-      console.error('Error saving state to localStorage:', error);
+      console.error("💥 Error saving state to localStorage:", error);
     }
   }, [state]);
 

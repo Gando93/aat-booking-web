@@ -78,7 +78,7 @@ export default function Bookings() {
       }
 
       const bookingData: Booking = {
-        id: editingBooking?.id || generateId('booking'),
+        id: editingBooking?.id || generateId(),
         guestName: formData.guestName,
         guestEmail: formData.guestEmail,
         guestPhone: formData.guestPhone,

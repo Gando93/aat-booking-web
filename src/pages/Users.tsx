@@ -35,7 +35,7 @@ export default function Users() {
       dispatch({ type: 'UPDATE_USER', user: updatedUser });
     } else {
       const newUser: UserType = {
-        id: generateId('user'),
+        id: generateId(),
         ...formData,
         createdAt: today(),
       };

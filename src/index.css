@@ -1,68 +1,518 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* React Resizable Styles */
+.react-resizable {
+  position: relative;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZG90cyBmaWxsPSIjOTk5IiBvcGFjaXR5PSIwLjgiPgo8Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIvPgo8Y2lyY2xlIGN4PSI1IiBjeT0iMSIgcj0iMSIvPgo8Y2lyY2xlIGN4PSIxIiBjeT0iNSIgcj0iMSIvPgo8Y2lyY2xlIGN4PSI1IiBjeT0iNSIgcj0iMSIvPgo8L2RvdHM+Cjwvc3ZnPgo=');
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+.react-resizable-handle-sw {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+}
+
+.react-resizable-handle-ne {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+}
+
+.react-resizable-handle-nw {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+}
+
+.react-resizable-handle-s {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: s-resize;
+  width: 20px;
+  height: 10px;
+}
+
+.react-resizable-handle-e {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: e-resize;
+  width: 10px;
+  height: 20px;
+}
+
+.react-resizable-handle:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 2px;
+}
+
+/* Custom resize handle styling */
+.react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid #cbd5e1;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.react-resizable-handle:hover::after {
+  border-right-color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+/* React Grid Layout Styles */
+.react-grid-layout {
+  position: relative;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZG90cyBmaWxsPSIjOTk5IiBvcGFjaXR5PSIwLjgiPgo8Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIvPgo8Y2lyY2xlIGN4PSI1IiBjeT0iMSIgcj0iMSIvPgo8Y2lyY2xlIGN4PSIxIiBjeT0iNSIgcj0iMSIvPgo8Y2lyY2xlIGN4PSI1IiBjeT0iNSIgcj0iMSIvPgo8L2RvdHM+Cjwvc3ZnPgo=');
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  cursor: se-resize;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid #cbd5e1;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.react-grid-item:hover > .react-resizable-handle::after {
+  border-right-color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.react-grid-placeholder {
+  background: #3b82f6;
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  user-select: none;
+  border-radius: 16px;
+}
+
+/* React Big Calendar Custom Styles */
+.rbc-calendar {
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.rbc-header {
+  padding: 8px 4px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rbc-month-view {
+  border: none;
+}
+
+.rbc-date-cell {
+  padding: 8px 4px;
+  text-align: right;
+}
+
+.rbc-date-cell > a {
+  color: #374151;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.rbc-today {
+  background-color: #eff6ff;
+}
+
+.rbc-off-range-bg {
+  background: #f9fafb;
+}
+
+.rbc-event {
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  padding: 2px 4px;
+  margin: 1px 0;
+}
+
+.rbc-event:focus {
+  outline: none;
+}
+
+.rbc-slot-selection {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 4px;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid #f3f4f6;
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Custom drag handle styles */
+.drag-handle {
+  cursor: grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Smooth transitions for widgets */
+.react-grid-item {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  transform: rotate(2deg) scale(1.05);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.react-grid-item.react-resizable-resizing {
+  z-index: 1;
+  opacity: 0.8;
+}
+
+/* Modern Dashboard Enhancements */
+.layout {
+  background: transparent;
+}
+
+/* Beautiful grid item styling */
+.react-grid-item {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: left, top, width, height, transform;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform, width, height;
+}
+
+/* Enhanced resize handle */
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px 0 16px 0;
+  cursor: se-resize;
+  opacity: 0;
+  transition: all 200ms ease;
+}
+
+.react-grid-item:hover > .react-resizable-handle {
+  opacity: 1;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  opacity: 0.8;
+}
+
+/* Beautiful placeholder */
+.react-grid-placeholder {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+  border: 2px dashed rgba(59, 130, 246, 0.3);
+  border-radius: 24px;
+  transition-duration: 200ms;
+  z-index: 2;
+  user-select: none;
+}
+
+/* Enhanced dragging state */
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 1000;
+  transform: rotate(3deg) scale(1.08);
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2);
+  border-radius: 24px;
+}
+
+.react-grid-item.react-resizable-resizing {
+  z-index: 1;
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* Modern Calendar Styling */
+.rbc-calendar {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: transparent;
+}
+
+.rbc-header {
+  padding: 12px 8px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.rbc-month-view {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.rbc-date-cell {
+  padding: 12px 8px;
+  text-align: right;
+}
+
+.rbc-date-cell > a {
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: all 200ms ease;
+}
+
+.rbc-date-cell > a:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.rbc-today {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.rbc-today .rbc-date-cell > a {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  font-weight: 700;
+}
+
+.rbc-off-range-bg {
+  background: #fafafa;
+}
+
+.rbc-event {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  margin: 2px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 200ms ease;
+}
+
+.rbc-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rbc-event:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.rbc-slot-selection {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+  border-radius: 8px;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid #f3f4f6;
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+}
+
+/* Enhanced animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  a:hover {
-    color: #747bff;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s ease-out forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.3s ease-out forwards;
+}
+
+/* Glass morphism effects */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Modern gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced hover states */
+.hover-lift {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern button styles */
+.modern-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.modern-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+}
+
+.modern-button:active {
+  transform: translateY(0);
+}
+
+/* Status indicators */
+.status-online {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.status-pending {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.status-offline {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Progress bars */
+.progress-bar {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  height: 8px;
+  transition: all 300ms ease;
+}
+
+.progress-bar:hover {
+  transform: scaleY(1.2);
 }

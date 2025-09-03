@@ -3,7 +3,7 @@ export type UserRole = 'admin' | 'manager' | 'staff' | 'viewer';
 export interface User {
   id: string;
   email: string;
-  name: string;
+  phone?: string;  name: string;
   role: UserRole;
   avatar?: string;
   isActive: boolean;
@@ -50,12 +50,58 @@ export interface Service {
   maxCapacity: number;
   isActive: boolean;
   createdAt: string;
+  updatedAt?: string;
   // Excursion-specific fields
   highlights?: string[];
   pickupTime?: string;
   dropoffTime?: string;
   itemsToBring?: string[];
   currency?: string;
+  thumbnail?: string; // URL or base64 image data
+}
+
+export interface SystemSettings {
+  id: string;
+  companyName: string;
+  companyEmail: string;
+  companyPhone: string;
+  companyAddress: string;
+  defaultCurrency: string;
+  timezone: string;
+  dateFormat: string;
+  timeFormat: string;
+  emailNotifications: boolean;
+  smsNotifications: boolean;
+  autoConfirmBookings: boolean;
+  requireDeposit: boolean;
+  defaultDepositPercentage: number;
+  cancellationPolicy: string;
+  termsAndConditions: string;
+  privacyPolicy: string;
+  theme: 'light' | 'dark' | 'auto';
+  language: string;
+  autoSyncEnabled: boolean;
+  autoSyncInterval: number;
+}
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'warning' | 'error' | 'success';
+  createdAt: string;
+  read: boolean;
+}
+
+export interface Permission {
+  module: string;
+  actions: string[];
+}
+
+export interface RolePermissions {
+  role: UserRole;
+  description: string;
+  permissions: Permission[];
 }
 
 export interface AppState {
@@ -65,6 +111,9 @@ export interface AppState {
   services: Service[];
   isLoading: boolean;
   error: string | null;
+  notifications: Notification[];
+  systemSettings: SystemSettings;
+  rolePermissions: RolePermissions[];
 }
 
 export type AppAction =
@@ -80,7 +129,11 @@ export type AppAction =
   | { type: 'ADD_USER'; user: User }
   | { type: 'UPDATE_USER'; user: User }
   | { type: 'DELETE_USER'; id: string }
-  | { type: 'RESTORE_STATE'; state: AppState };
+  | { type: 'UPDATE_SYSTEM_SETTINGS'; settings: SystemSettings }
+  | { type: 'RESTORE_STATE'; state: AppState }
+  | { type: 'ADD_NOTIFICATION'; notification: Notification }
+  | { type: 'MARK_NOTIFICATION_READ'; id: string }
+  | { type: 'DELETE_NOTIFICATION'; id: string };
 
 export function generateId(prefix: string = 'id'): string {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
@@ -114,3 +167,47 @@ export function generateReceiptNumber(): string {
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `AAT${year}${month}${day}${random}`;
 }
+
+export const DEFAULT_ROLE_PERMISSIONS: RolePermissions[] = [
+  {
+    role: 'admin',
+    description: 'Full system access',
+    permissions: [
+      { module: 'dashboard', actions: ['view'] },
+      { module: 'bookings', actions: ['view', 'create', 'edit', 'delete'] },
+      { module: 'services', actions: ['view', 'create', 'edit', 'delete'] },
+      { module: 'users', actions: ['view', 'create', 'edit', 'delete'] },
+      { module: 'settings', actions: ['view', 'edit'] },
+      { module: 'reports', actions: ['view', 'export'] }
+    ]
+  },
+  {
+    role: 'manager',
+    description: 'Management level access',
+    permissions: [
+      { module: 'dashboard', actions: ['view'] },
+      { module: 'bookings', actions: ['view', 'create', 'edit', 'delete'] },
+      { module: 'services', actions: ['view', 'create', 'edit'] },
+      { module: 'users', actions: ['view', 'create', 'edit'] },
+      { module: 'reports', actions: ['view'] }
+    ]
+  },
+  {
+    role: 'staff',
+    description: 'Staff level access',
+    permissions: [
+      { module: 'dashboard', actions: ['view'] },
+      { module: 'bookings', actions: ['view', 'create', 'edit'] },
+      { module: 'services', actions: ['view'] }
+    ]
+  },
+  {
+    role: 'viewer',
+    description: 'Read-only access to basic information',
+    permissions: [
+      { module: 'dashboard', actions: ['view'] },
+      { module: 'bookings', actions: ['view'] },
+      { module: 'services', actions: ['view'] }
+    ]
+  }
+];
